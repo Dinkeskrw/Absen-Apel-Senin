@@ -116,25 +116,6 @@ h1, h2 {
     background-color: #f44336;
 }
 
-#riwayat-absensi {
-    list-style: none;
-    padding: 0;
-    margin-top: 20px;
-}
-
-#riwayat-absensi li {
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-}
-
-#riwayat-absensi li:last-child {
-    border-bottom: none;
-}
-
-#riwayat-absensi li strong {
-    font-weight: bold;
-}
-
 .error-message {
     color: red;
     font-size: 0.9rem;
@@ -173,10 +154,6 @@ h1, h2 {
     .button-group {
         flex-direction: column;
         gap: 5px;
-    }
-
-    #riwayat-absensi li {
-        font-size: 0.9rem;
     }
 }
 
