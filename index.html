@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Absensi dengan Validasi Lokasi dan Foto</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Absensi Apel Senin</h1>
+        <h1>Dinas Kesehatan Kabupaten Karawang</h1>
+        <form id="form-absensi" class="attendance-form">
+            <div class="form-group">
+                <label for="nama">Nama Lengkap:</label>
+                <input type="text" id="nama" placeholder="Masukkan nama lengkap Anda" required>
+            </div>
+
+            <div class="form-group">
+                <label for="nip">NIP:</label>
+                <input type="text" id="nip" placeholder="Masukkan NIP Anda" required>
+            </div>
+
+            <div class="form-group">
+                <label for="pangkat-golongan">Pangkat/Golongan:</label>
+                <input type="text" id="pangkat-golongan" placeholder="Masukkan Pangkat/Golongan" required>
+            </div>
+
+            <div class="form-group">
+                <label for="jabatan">Jabatan:</label>
+                <input type="text" id="jabatan" placeholder="Masukkan Jabatan" required>
+            </div>
+
+            <div class="form-group">
+                <label for="unit-kerja">Unit Kerja:</label>
+                <input type="text" id="unit-kerja" placeholder="Masukkan Unit Kerja" required>
+            </div>
+
+            <div class="form-group location-section">
+                <label for="koordinat">Titik Koordinat:</label>
+                <input type="text" id="koordinat" value="Mencari lokasi..." readonly>
+                <button type="button" id="ambil-lokasi">Ambil Lokasi</button>
+                <p id="lokasi-error" class="error-message" style="display: none;">Anda berada di luar radius 30 meter.</p>
+            </div>
+
+            <div class="form-group camera-section">
+                <label for="foto">Foto:</label>
+                <video id="video" width="100%" height="auto" autoplay></video>
+                <button type="button" id="ambil-foto">Ambil Foto</button>
+                <canvas id="canvas" style="display:none;"></canvas>
+                <img id="hasil-foto" style="display:none;" width="100%" height="auto" alt="Hasil Foto">
+            </div>
+
+            <div class="button-group">
+                <button type="button" id="absen-masuk" disabled>Absen Masuk</button>
+                <button type="button" id="absen-keluar" disabled>Absen Keluar</button>
+            </div>
+        </form>
+
+        <h2>Riwayat Absensi</h2>
+        <ul id="riwayat-absensi">
+            </ul>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
