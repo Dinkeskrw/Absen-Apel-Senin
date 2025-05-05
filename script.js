@@ -12,9 +12,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const ambilFotoButton = document.getElementById('ambil-foto');
     const absenMasukButton = document.getElementById('absen-masuk');
     const absenKeluarButton = document.getElementById('absen-keluar');
-    const riwayatAbsensiList = document.getElementById('riwayat-absensi');
     const formAbsensi = document.getElementById('form-absensi');
     const lokasiError = document.getElementById('lokasi-error');
+
+    // Ganti dengan URL Aplikasi Web Google Apps Script Anda
+    const googleAppsScriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
 
     const targetLatitude = -6.3178501;
     const targetLongitude = 107.3071573;
@@ -112,48 +114,8 @@ document.addEventListener('DOMContentLoaded', function() {
     ambilFotoButton.addEventListener('click', ambilFoto);
     aktifkanKamera(); // Aktifkan kamera saat halaman dimuat
 
-    // Fungsi untuk menyimpan data absensi ke localStorage
-    function simpanAbsensi(nama, nip, pangkat, jabatan, unitKerja, koordinat, foto, waktu, jenis) {
-        const absensi = {
-            nama: nama,
-            nip: nip,
-            pangkat: pangkat,
-            jabatan: jabatan,
-            unitKerja: unitKerja,
-            koordinat: koordinat,
-            foto: foto,
-            waktu: waktu,
-            jenis: jenis
-        };
-        let riwayat = localStorage.getItem('riwayatAbsensi');
-        riwayat = riwayat ? JSON.parse(riwayat) : [];
-        riwayat.push(absensi);
-        localStorage.setItem('riwayatAbsensi', JSON.stringify(riwayat));
-        tampilkanRiwayatAbsensi();
-    }
-
-    // Fungsi untuk menampilkan riwayat absensi dari localStorage
-    function tampilkanRiwayatAbsensi() {
-        riwayatAbsensiList.innerHTML = '';
-        const riwayat = localStorage.getItem('riwayatAbsensi');
-        if (riwayat) {
-            const dataAbsensi = JSON.parse(riwayat);
-            dataAbsensi.forEach(item => {
-                const listItem = document.createElement('li');
-                const imgElement = item.foto ? `<img src="${item.foto}" alt="Foto Absensi" style="max-width: 80px; height: auto;">` : 'Tidak ada foto';
-                listItem.innerHTML = `
-                    <strong><span class="math-inline">\{item\.nama\}</strong\> \(</span>{item.nip}) - ${item.jenis} pada ${item.waktu}<br>
-                    Pangkat/Golongan: ${item.pangkat}, Jabatan: ${item.jabatan}, Unit Kerja: ${item.unitKerja}<br>
-                    Koordinat: ${item.koordinat}<br>
-                    Foto: ${imgElement}
-                `;
-                riwayatAbsensiList.appendChild(listItem);
-            });
-        }
-    }
-
-    // Fungsi untuk melakukan absensi
-    function lakukanAbsensi(jenisAbsensi) {
+    // Fungsi untuk mengirim data absensi ke Google Apps Script
+    async function kirimAbsensi(jenisAbsensi) {
         const nama = namaInput.value.trim();
         const nip = nipInput.value.trim();
         const pangkat = pangkatGolonganInput.value.trim();
@@ -164,15 +126,36 @@ document.addEventListener('DOMContentLoaded', function() {
             const distance = calculateDistance(currentLatitude, currentLongitude, targetLatitude, targetLongitude);
             if (distance <= radius) {
                 const waktu = new Date().toLocaleString();
-                simpanAbsensi(nama, nip, pangkat, jabatan, unitKerja, `${currentLatitude}, ${currentLongitude}`, fotoBase64, waktu, jenisAbsensi);
-                formAbsensi.reset();
-                koordinatInput.value = 'Mencari lokasi...';
-                hasilFotoElement.style.display = 'none';
-                fotoBase64 = null;
-                dapatkanLokasi(); // Ambil lokasi lagi setelah absen
-            } else {
-                alert('Anda berada di luar radius 30 meter dan tidak dapat melakukan absensi.');
-                lokasiError.style.display = 'block';
-            }
-        } else {
-            alert('
+                const dataAbsensi = {
+                    nama: nama,
+                    nip: nip,
+                    pangkat: pangkat,
+                    jabatan: jabatan,
+                    unitKerja: unitKerja,
+                    koordinat: `${currentLatitude}, ${currentLongitude}`,
+                    foto: fotoBase64,
+                    waktu: waktu,
+                    jenis: jenisAbsensi
+                };
+
+                try {
+                    const response = await fetch(googleAppsScriptURL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(dataAbsensi)
+                    });
+
+                    const result = await response.json();
+                    if (result.result === 'success') {
+                        alert('Absensi berhasil!');
+                        formAbsensi.reset();
+                        koordinatInput.value = 'Mencari lokasi...';
+                        hasilFotoElement.style.display = 'none';
+                        fotoBase64 = null;
+                        dapatkanLokasi();
+                    } else {
+                        alert('Gagal menyimpan absensi: ' + result.message);
+                    }
+                }
