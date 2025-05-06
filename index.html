@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Absensi dengan Validasi Lokasi dan Foto</title>
+    <title>Aplikasi Absensi dengan Lokasi (Nama Tempat) dan Foto</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>Absensi Apel Senin</h1>
-        <h1>Dinas Kesehatan Kabupaten Karawang</h1>
+        <h1>Pegawai Dinas Kesehatan</h1>
+        <h1>Kabupaten Karawang</h1>
         <form id="form-absensi" class="attendance-form">
             <div class="form-group">
                 <label for="nama">Nama Lengkap:</label>
@@ -37,10 +38,9 @@
             </div>
 
             <div class="form-group location-section">
-                <label for="koordinat">Titik Koordinat:</label>
+                <label for="koordinat">Titik Koordinat dan Tempat:</label>
                 <input type="text" id="koordinat" value="Mencari lokasi..." readonly>
                 <button type="button" id="ambil-lokasi">Ambil Lokasi</button>
-                <p id="lokasi-error" class="error-message" style="display: none;">Anda berada di luar radius 30 meter.</p>
             </div>
 
             <div class="form-group camera-section">
@@ -52,13 +52,13 @@
             </div>
 
             <div class="button-group">
-                <button type="button" id="absen-masuk" disabled>Absen Masuk</button>
-                <button type="button" id="absen-keluar" disabled>Absen Keluar</button>
+                <button type="button" id="absen-masuk">Absen Masuk</button>
+                <button type="button" id="absen-keluar">Absen Keluar</button>
             </div>
         </form>
 
-        <h2>Riwayat Absensi (Data tersimpan di Google Sheets)</h2>
-        <p>Riwayat absensi akan tersimpan secara otomatis di Google Sheets.</p>
+        <h2>Riwayat Absensi</h2>
+        <p>Data absensi akan tersimpan di Google Sheets.</p>
     </div>
 
     <script src="script.js"></script>
