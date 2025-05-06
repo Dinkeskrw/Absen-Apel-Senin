@@ -116,12 +116,6 @@ h1, h2 {
     background-color: #f44336;
 }
 
-.error-message {
-    color: red;
-    font-size: 0.9rem;
-    margin-top: 5px;
-}
-
 /* Media Queries untuk Responsif */
 @media screen and (max-width: 768px) {
     .container {
